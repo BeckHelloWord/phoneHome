@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>手机归属地</title>
+    <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        ul li {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        body {
+            font-size: 14px;
+            font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", Arial, sans-serif;
+        }
+
+        .phoneHome {
+            width: 300px;
+            height: 30px;
+            margin: 100px auto;
+            border: 1px solid #999;
+        }
+
+        .phoneHome .phoneHome-country {
+            position: relative;
+            display: inline-block;
+            vertical-align: top;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .phoneHome .phoneHome-country .country-name {
+
+            display: inline-block;
+            width: 60px;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 10px;
+        }
+
+        .phoneHome .phoneHome-country ul {
+            display: none;
+            position: absolute;
+            top: 30px;
+            left: 0;
+            width: 60px;
+            border: 1px solid #999;
+            background: #fff;
+        }
+
+        .phoneHome .phoneHome-country ul li {
+            padding: 0 10px;
+            margin: 5px 0;
+        }
+
+        .phoneHome .phoneHome-country ul a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+
+        .phoneHome .phoneHome-country ul a:hover {
+            background: #cecece;
+        }
+
+        .phoneHome .phoneHome-zone, .phoneHome .phoneHome-number {
+            height: 28px;
+            line-height: 28px;
+
+        }
+
+        .phoneHome .phoneHome-zone {
+            margin-right: 5px;
+        }
+
+        .phoneHome .phoneHome-number {
+            vertical-align: top;
+            border: none;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="phoneHome">
+    <div class="phoneHome-country">
+        <span class='country-name js-country-name'>中国</span>
+        <ul class="js-country-list">
+            <!--            <a href="javascript:;">
+                            <li>美国</li>
+                        </a>
+                        <a href="javascript:;">
+                            <li>日本</li>
+                        </a>
+                        <a href="javascript:;">
+                            <li>英国</li>
+                        </a>
+                        <a href="javascript:;">
+                            <li>香港</li>
+                        </a>
+                        <a href="javascript:;">
+                            <li>澳门</li>
+                        </a>
+                        <a href="javascript:;">
+                            <li>台湾</li>
+                        </a>-->
+        </ul>
+    </div>
+    <span class="phoneHome-zone js-phoneHome-zone">+86-</span><input type="number" value="15168250191"
+                                                                     class="phoneHome-number"/>
+</div>
+<script>
+    $(function () {
+        /*动态添加数据*/
+        $.get('./data.json', function (data) {
+            if (data.isSuccess) {
+                var str = "";
+                for (var i = 0, len = data.data.length; i < len; i++) {
+                    str += "<a href='javascript:;'><li data-code='" + data.data[i].code + "'>" + data.data[i].name + "</li></a>"
+                }
+                $(".js-country-list").append(str);
+            }
+        });
+
+        /*下拉框*/
+        $(".js-country-name").on('click', function () {
+            $(".js-country-list").css("display", "block");
+        });
+
+        /*动态元素绑定事件*/
+        $(".js-country-list").on("click", 'a', function (e) {
+            e.preventDefault();
+            $('.js-country-name').text($(this).text());
+            $(".js-phoneHome-zone").text('+' + $(this).find('li').data("code") + '-');
+            $(".js-country-list").css("display", "none");
+        })
+    })
+</script>
+</body>
+</html>
